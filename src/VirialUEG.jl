@@ -1,5 +1,7 @@
 module VirialUEG
 
-# Write your package code here.
+include("pade_parameters.jl")
+include("parameters.jl")
+include("virial.jl")
 
 end
