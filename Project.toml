@@ -3,6 +3,9 @@ uuid = "606fb3a7-65ae-406d-8718-9f45bebeccf6"
 authors = ["Biplab Mahato"]
 version = "1.0.0-DEV"
 
+[deps]
+SpecialFunctions = "276daf66-3868-5448-9aa4-cd146d93841b"
+
 [compat]
 julia = "1"
 
