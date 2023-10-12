@@ -122,8 +122,7 @@ VirialUEG.v2(0.589307)
 linear(x) = VirialUEG.v2(temp) - x*VirialUEG.v3(temp)
 
 # ╔═╡ 704bc482-98dd-46a5-8c07-e03826ef73ca
-p = @pgf Axis(
-	{
+p = @pgf Axis({
 		xlabel = L"-\sqrt{n_B}\ln(4\pi n_B/T_{\textrm{Ha}}^2)",
 		ylabel = L"v_2^{\textrm{eff}}",
 		height = "7cm",
@@ -134,52 +133,49 @@ p = @pgf Axis(
 	},
 	PlotInc({
 		no_marks
-	},
+		},
 		Table(
 			-xaxis, yaxis
 		)
-),
-LegendEntry("Interpolation"),
-PlotInc(
-	{
-	"only marks",
-    "error bars/y dir=both",
-    "error bars/y explicit",
-	},
-	Coordinates(
-		[-xx(n(20),temp), -xx(n(40),temp)], 
-		[v2eff(-0.011929,20,128),v2eff(-0.0043404, 40, 512)],
-		yerror = [0.0, (v2eff(-0.0043404,40,512)-v2eff(-0.0043404 - 0.0000086, 40, 512))]
-	)
-),
-LegendEntry("PIMC"),
-PlotInc(
-	{
-	no_marks,
-	dashed
-	},
-	Coordinates(
-		[0.0, 0.07],
-		[linear(0.0), linear(0.07)]
-	)
-),
-LegendEntry("virial 2+3"),
-PlotInc({
-	mark = "*"
+	),
+	LegendEntry("Interpolation"),
+	PlotInc(
+		{
+		"only marks",
+	    "error bars/y dir=both",
+	    "error bars/y explicit",
+		},
+		Coordinates(
+			[-xx(n(20),temp), -xx(n(40),temp)], 
+			[v2eff(-0.011929,20,128),v2eff(-0.0043404, 40, 512)],
+			yerror = [0.0, (v2eff(-0.0043404,40,512)-v2eff(-0.0043404 - 0.0000086, 40, 512))]
+		)
+	),
+	LegendEntry("PIMC"),
+	PlotInc(
+		{
+		no_marks,
+		dashed
+		},
+		Coordinates(
+			[0.0, 0.07],
+			[linear(0.0), linear(0.07)]
+		)
+	),
+	LegendEntry("virial 2+3"),
+	PlotInc({
+		mark = "*"
 
-},
-	Coordinates(
-		[0.0], [linear(0.0)]
-	)
-),
-[raw"\node ", " at ", Coordinate(0.06,-5),"{\$T_{Ha}\$=$(round(temp,digits=3))};"]
+		},
+		Coordinates(
+			[0.0], [linear(0.0)]
+		)
+	),
+	[raw"\node ", " at ", Coordinate(0.06,-5),"{\$T_{Ha}\$=$(round(temp,digits=3))};"]
 )
 
 # ╔═╡ a8872867-2aec-45a0-b5bb-31261c7a7529
 linear2(x) = VirialUEG.v2(temp2) - x*VirialUEG.v3(temp2)
-
-# ╔═╡ a1e45b34-a6c0-4c19-88b2-3499cdc54a0e
-pgfsave("figure1.pdf",p)
 
 # ╔═╡ 3ddf49bf-92dc-45d7-8dab-49c98bc2cdc4
 p2 = @pgf Axis(
@@ -235,9 +231,6 @@ PlotInc({
 ),
 [raw"\node ", " at ", Coordinate(0.03,-25),"{\$T_{Ha}\$=$(round(temp2,digits=3))};"]
 )
-
-# ╔═╡ 646ebb6e-524a-4521-bc11-1ad68e8875bf
-pgfsave("figure2.pdf",p2)
 
 # ╔═╡ 6fdf6faa-3706-4549-8e63-a288cd922cbe
 md"## Figure 3"
@@ -301,9 +294,6 @@ PlotInc({
 [raw"\node ", " at ", Coordinate(3.5,-0.008),"{\$T_{Ha}\$ = 100};"]
 )
 
-# ╔═╡ 751d8e62-0207-41a6-96d4-4509cf81023b
-pgfsave("figure3.pdf",p3)
-
 # ╔═╡ 0c6ef315-bd2f-433f-8a0f-4d259528b641
 md"### V3"
 
@@ -320,6 +310,15 @@ end
 # ╔═╡ 5f7d2903-2f83-4d0e-82c1-5b911a58ebd9
 linear4(x) =  VirialUEG.v3(temp4) - x*0.00038
 
+# ╔═╡ 934e6da6-b909-4998-b9b0-3ab7d8f46ca1
+v4_eff(virial_interp, 2, 217.204)
+
+# ╔═╡ 43e909df-7a75-45d9-85a2-241a7e312eee
+n(0.01)
+
+# ╔═╡ c38dfbe9-676b-4fc8-a909-93fc3f72cc0a
+v4_eff(virial_interp, 0.2,theta(0.2,100))
+
 # ╔═╡ 5b9d1f5a-501f-42a0-97fa-11fd87eb28cf
 p4 = @pgf Axis(
 	{
@@ -327,7 +326,7 @@ p4 = @pgf Axis(
 		ylabel = L"v_3^{\textrm{eff}}",
 		height = "7cm",
 		width = "11cm",
-		# scaled_ticks = false,
+		scaled_ticks = false,
 		# tick_label_style = "/pgf/number format/fixed",
 		xmin=0.0,
 xmax=1.0,
@@ -357,7 +356,7 @@ PlotInc(
 LegendEntry("PIMC"),
 PlotInc(
 	{
-	thin,
+	dashed,
 	black,
 	no_marks
 	},
@@ -366,7 +365,7 @@ PlotInc(
 		[linear4(0.0), linear4(1.0)]
 	)
 ),
-LegendEntry("virial 2+3"),
+LegendEntry("virial 3+4"),
 PlotInc({
 	mark = "*"
 
@@ -375,12 +374,22 @@ PlotInc({
 		[0.0], [linear4(0.0)]
 	)
 ),
-[raw"\node ", " at ", Coordinate(0.4,0.001),"{\$T_{Ha}\$ = 100};"]
-
+[raw"\node ", " at ", Coordinate(0.4,0.001),"{\$T_{Ha}\$ = 100};"],
+PlotInc(
+	{
+	dotted,
+	black,
+	no_marks
+	},
+	Coordinates(
+		[0.0, 1.0],
+		[VirialUEG.v3(temp4), VirialUEG.v3(temp4) - 0.001295]
+	)
+)
 )
 
-# ╔═╡ 74364cf1-e9f8-4b83-a616-1d6145151e37
-pgfsave("figure4.pdf",p4)
+# ╔═╡ 89cbd087-3363-4029-8cac-11ee7c6f8ba0
+pgfsave("v3_eff2.pdf",p4)
 
 # ╔═╡ Cell order:
 # ╠═7c3401fe-612b-11ee-2122-cf64fa2a3a00
@@ -409,15 +418,15 @@ pgfsave("figure4.pdf",p4)
 # ╠═704bc482-98dd-46a5-8c07-e03826ef73ca
 # ╠═bd82bf9a-0820-4d25-a860-f27255958851
 # ╠═a8872867-2aec-45a0-b5bb-31261c7a7529
-# ╠═a1e45b34-a6c0-4c19-88b2-3499cdc54a0e
 # ╠═3ddf49bf-92dc-45d7-8dab-49c98bc2cdc4
-# ╠═646ebb6e-524a-4521-bc11-1ad68e8875bf
 # ╟─6fdf6faa-3706-4549-8e63-a288cd922cbe
 # ╠═e3acbc5a-31cc-4030-844f-093b6cb60566
 # ╠═47b6f1b7-d45a-4b45-bf9d-bb691a26bb9a
-# ╠═751d8e62-0207-41a6-96d4-4509cf81023b
 # ╠═0c6ef315-bd2f-433f-8a0f-4d259528b641
 # ╠═e526856c-c211-400f-ae7e-10b3293cead2
 # ╠═5f7d2903-2f83-4d0e-82c1-5b911a58ebd9
+# ╠═934e6da6-b909-4998-b9b0-3ab7d8f46ca1
+# ╠═43e909df-7a75-45d9-85a2-241a7e312eee
+# ╠═c38dfbe9-676b-4fc8-a909-93fc3f72cc0a
 # ╠═5b9d1f5a-501f-42a0-97fa-11fd87eb28cf
-# ╠═74364cf1-e9f8-4b83-a616-1d6145151e37
+# ╠═89cbd087-3363-4029-8cac-11ee7c6f8ba0
