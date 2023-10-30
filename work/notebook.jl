@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.19.27
+# v0.19.29
 
 using Markdown
 using InteractiveUtils
@@ -17,6 +17,9 @@ using DelimitedFiles
 
 # ╔═╡ cd3aea1c-f261-4177-8334-09da3ce1af7f
 using PGFPlotsX
+
+# ╔═╡ f3833fa6-6e92-4656-9af0-35a838143e52
+using EasyFit
 
 # ╔═╡ eef8e69d-8407-41b7-9aa8-db7183a64531
 temp = T(20,128)
@@ -118,15 +121,20 @@ end
 # ╔═╡ ec7a8bed-9853-4ab7-b5eb-991f95ed1a21
 VirialUEG.v2(0.589307)
 
+# ╔═╡ 87b66793-079e-4a2c-9c69-774a622a9abe
+			[-xx(n(20),temp), -xx(n(40),temp)], 
+			[v2eff(-0.011929,20,128),v2eff(-0.0043404, 40, 512)],
+			[0.0, (v2eff(-0.0043404,40,512)-v2eff(-0.0043404 - 0.0000086, 40, 512))]
+
 # ╔═╡ bd82bf9a-0820-4d25-a860-f27255958851
 linear(x) = VirialUEG.v2(temp) - x*VirialUEG.v3(temp)
 
 # ╔═╡ 704bc482-98dd-46a5-8c07-e03826ef73ca
 p = @pgf Axis({
-		xlabel = L"-\sqrt{n_B}\ln(4\pi n_B/T_{\textrm{Ha}}^2)",
-		ylabel = L"v_2^{\textrm{eff}}",
+		xlabel = L"-\sqrt{n_B}\ln(4\pi n_B/T_{\rm{Ha}}^2)",
+		ylabel = L"v_2^{\rm{eff}}(T,n)",
 		height = "7cm",
-		width = "11cm",
+		width = "9.5cm",
 		tick_label_style = "/pgf/number format/fixed",
 		xmin=0.0,
 		legend_pos = "south east"
@@ -171,8 +179,14 @@ p = @pgf Axis({
 			[0.0], [linear(0.0)]
 		)
 	),
-	[raw"\node ", " at ", Coordinate(0.06,-5),"{\$T_{Ha}\$=$(round(temp,digits=3))};"]
+	[raw"\node ", " at ", Coordinate(0.06,-5),"{\$T_{\\rm Ha}\$=$(round(temp,digits=3))};"]
 )
+
+# ╔═╡ e9728c3e-51ea-4f43-b7c5-43d6ff8c89a2
+pgfsave("fig_casus_20_128.pdf",p)
+
+# ╔═╡ 768ab2ce-7fa2-4c11-9f4f-a0487ffe2a13
+[linear(0.0), linear(0.07)]
 
 # ╔═╡ a8872867-2aec-45a0-b5bb-31261c7a7529
 linear2(x) = VirialUEG.v2(temp2) - x*VirialUEG.v3(temp2)
@@ -180,10 +194,10 @@ linear2(x) = VirialUEG.v2(temp2) - x*VirialUEG.v3(temp2)
 # ╔═╡ 3ddf49bf-92dc-45d7-8dab-49c98bc2cdc4
 p2 = @pgf Axis(
 	{
-		xlabel = L"-\sqrt{n_B}\ln(4\pi n_B/T_{\textrm{Ha}}^2)",
-		ylabel = L"v_2^{\textrm{eff}}",
+		xlabel = L"-\sqrt{n_B}\ln(4\pi n_B/T_{\rm{Ha}}^2)",
+		ylabel = L"v_2^{\rm{eff}}(T,n)",
 		height = "7cm",
-		width = "11cm",
+		width = "9.5cm",
 		scaled_ticks = false,
 		tick_label_style = "/pgf/number format/fixed",
 		xmin=0.0,
@@ -229,8 +243,15 @@ PlotInc({
 		[0.0], [linear2(0.0)]
 	)
 ),
-[raw"\node ", " at ", Coordinate(0.03,-25),"{\$T_{Ha}\$=$(round(temp2,digits=3))};"]
+[raw"\node ", " at ", Coordinate(0.03,-25),"{\$T_{\\rm Ha}\$=$(round(temp2,digits=3))};"]
 )
+
+# ╔═╡ 75f14c80-4f13-44c1-9ba8-9b4e35e4fa92
+		[0.0, 0.05],
+		[linear2(0.0), linear2(0.05)]
+
+# ╔═╡ 27741f0e-a935-4f08-bb59-1f0b552c105d
+pgfsave("fig_casus_20_64.pdf",p2)
 
 # ╔═╡ 6fdf6faa-3706-4549-8e63-a288cd922cbe
 md"## Figure 3"
@@ -238,15 +259,21 @@ md"## Figure 3"
 # ╔═╡ e3acbc5a-31cc-4030-844f-093b6cb60566
 linear3(x) = VirialUEG.v2(temp3) - x*VirialUEG.v3(temp3)
 
+# ╔═╡ 141f22dd-afb2-44bb-b585-37e8ae8248cd
+length(x3axis)/7 *2
+
+# ╔═╡ f4aeb3a9-7337-4553-b7c7-ca84b262cf76
+fitlinear(-x3axis[3400:end], y3axis[3400:end])
+
 # ╔═╡ 47b6f1b7-d45a-4b45-bf9d-bb691a26bb9a
 p3 = @pgf Axis(
 	{
-		xlabel = L"-\sqrt{n_B}\ln(4\pi n_B/T_\textrm{Ha}^2)",
-		ylabel = L"v_2^{\textrm{eff}}",
+		xlabel = L"-\sqrt{n_B}\ln(4\pi n_B/T_{\rm{Ha}}^2)",
+		ylabel = L"v_2^{\rm{eff}}(T,n)",
 		height = "7cm",
-		width = "11cm",
-		# scaled_ticks = false,
-		# tick_label_style = "/pgf/number format/fixed",
+		width = "9.5cm",
+		scaled_ticks = false,
+		tick_label_style = "/pgf/number format/fixed, /pgf/number format/precision=5",
 		xmin=0.0,
 		xmax = 7.0,
 		legend_pos = "south east"
@@ -283,16 +310,47 @@ PlotInc(
 	)
 ),
 LegendEntry("virial 2+3"),
+PlotInc(
+	{
+	dashdotted,
+	black,
+	no_marks
+	},
+	Coordinates(
+		[0.0, 1.0],
+		[-0.012825684192487695, 0.0002893002586723349 - 0.012825684192487695]
+	)
+),
+LegendEntry("linear extrapol."),
 PlotInc({
-	mark = "*"
+	mark = "*",
+black,
+mark_options = {fill = "black"}
+
+},
+	Coordinates(
+		[0.0], [-0.012825684192487695]
+	)
+),
+PlotInc({
+	mark = "*",
+black,
+mark_options = {fill = "black"}
 
 },
 	Coordinates(
 		[0.0], [linear3(0.0)]
 	)
 ),
-[raw"\node ", " at ", Coordinate(3.5,-0.008),"{\$T_{Ha}\$ = 100};"]
+[raw"\node ", " at ", Coordinate(3.5,-0.008),"{\$T_{\\rm Ha}\$ = 100};"]
 )
+
+# ╔═╡ 204cbf81-17fe-440d-8dcf-21d10ef55300
+		[0.0, 3.0],
+		[linear3(0.0), linear3(3.0)]
+
+# ╔═╡ 05301310-c6df-4836-bf15-dd9772afd8d1
+pgfsave("fig_casus_100.pdf",p3)
 
 # ╔═╡ 0c6ef315-bd2f-433f-8a0f-4d259528b641
 md"### V3"
@@ -319,22 +377,24 @@ n(0.01)
 # ╔═╡ c38dfbe9-676b-4fc8-a909-93fc3f72cc0a
 v4_eff(virial_interp, 0.2,theta(0.2,100))
 
+# ╔═╡ b9c4f178-5a44-404a-a67f-fd0f0647e90c
+linear4(1.0)
+
 # ╔═╡ 5b9d1f5a-501f-42a0-97fa-11fd87eb28cf
 p4 = @pgf Axis(
 	{
-		xlabel = L"-1/\ln(4\pi n_B/T_{\textrm{Ha}}^2)",
-		ylabel = L"v_3^{\textrm{eff}}",
+		xlabel = L"-1/\ln(4\pi n_{\rm B}/T_{\rm{Ha}}^2)",
+		ylabel = L"v_3^{\rm{eff}}(T,n)",
 		height = "7cm",
-		width = "11cm",
+		width = "9.5cm",
 		scaled_ticks = false,
-		# tick_label_style = "/pgf/number format/fixed",
+		tick_label_style = "/pgf/number format/fixed, /pgf/number format/precision=5",
 		xmin=0.0,
 xmax=1.0,
 		legend_pos = "north east"
 	},
 	PlotInc({
-		no_marks,
-		thick
+		no_marks
 	},
 		Table(
 			-x4axis, y4axis
@@ -365,19 +425,10 @@ PlotInc(
 		[linear4(0.0), linear4(1.0)]
 	)
 ),
-LegendEntry("virial 3+4"),
-PlotInc({
-	mark = "*"
-
-},
-	Coordinates(
-		[0.0], [linear4(0.0)]
-	)
-),
-[raw"\node ", " at ", Coordinate(0.4,0.001),"{\$T_{Ha}\$ = 100};"],
+LegendEntry("virial 3+4 (fitted)"),
 PlotInc(
 	{
-	dotted,
+	dashdotted,
 	black,
 	no_marks
 	},
@@ -385,11 +436,51 @@ PlotInc(
 		[0.0, 1.0],
 		[VirialUEG.v3(temp4), VirialUEG.v3(temp4) - 0.001295]
 	)
+),
+LegendEntry("virial 3+4 (exact)"),
+[raw"\node ", " at ", Coordinate(0.5,-0.002),"{\$T_{\\rm{Ha}}\$ = 100};"],
+PlotInc({
+	mark = "*",
+black,
+mark_options = {fill = "black"}
+
+},
+	Coordinates(
+		[0.0], [linear4(0.0)]
+	)
 )
 )
 
+# ╔═╡ 7470cbfd-a0dd-4f2d-a103-fbb4eeab30ca
+		[0.0, 1.0],
+		[linear4(0.0), linear4(1.0)]
+
+# ╔═╡ b02a9057-332e-458b-8479-dd7f9a23f67e
+		[0.0, 1.0],
+		[VirialUEG.v3(temp4), VirialUEG.v3(temp4) - 0.001295]
+
 # ╔═╡ 89cbd087-3363-4029-8cac-11ee7c6f8ba0
 pgfsave("v3_eff2.pdf",p4)
+
+# ╔═╡ b21f675f-d286-4d11-9d39-8a8595c2ad33
+begin
+	writedlm("casus_20_128.dat",hcat(-xaxis,yaxis),'\t')
+	writedlm("casus_20_64.dat",hcat(-x2axis,y2axis),'\t')
+	writedlm("casus_100.dat",hcat(-x3axis,y3axis),'\t')
+	writedlm("v3_eff.dat",hcat(-x4axis,y4axis),'\t')
+end
+
+# ╔═╡ 145465c5-57ce-4688-b0a9-7d0a03cf6eec
+rlist = [10, 4, 2, 1.6, 1, 0.8, 0.5]
+
+# ╔═╡ 12d57eeb-5e36-4efd-82be-361488199d2e
+thetalist = theta.(rlist, 100)
+
+# ╔═╡ 1ce14d27-0961-4cb9-8f3e-8bf32071ea08
+[-1/log(4π*n(r)/100^2) for r in rlist]
+
+# ╔═╡ 58e84d2f-ee88-4c55-afae-983f67a32699
+v2list = [v3_eff(virial_interp, r, θ) for (r, θ) in zip(rlist, thetalist)]
 
 # ╔═╡ Cell order:
 # ╠═7c3401fe-612b-11ee-2122-cf64fa2a3a00
@@ -416,17 +507,35 @@ pgfsave("v3_eff2.pdf",p4)
 # ╠═ec7a8bed-9853-4ab7-b5eb-991f95ed1a21
 # ╠═cd3aea1c-f261-4177-8334-09da3ce1af7f
 # ╠═704bc482-98dd-46a5-8c07-e03826ef73ca
+# ╠═87b66793-079e-4a2c-9c69-774a622a9abe
+# ╠═768ab2ce-7fa2-4c11-9f4f-a0487ffe2a13
+# ╠═e9728c3e-51ea-4f43-b7c5-43d6ff8c89a2
 # ╠═bd82bf9a-0820-4d25-a860-f27255958851
 # ╠═a8872867-2aec-45a0-b5bb-31261c7a7529
 # ╠═3ddf49bf-92dc-45d7-8dab-49c98bc2cdc4
+# ╠═75f14c80-4f13-44c1-9ba8-9b4e35e4fa92
+# ╠═27741f0e-a935-4f08-bb59-1f0b552c105d
 # ╟─6fdf6faa-3706-4549-8e63-a288cd922cbe
 # ╠═e3acbc5a-31cc-4030-844f-093b6cb60566
+# ╠═f3833fa6-6e92-4656-9af0-35a838143e52
+# ╠═141f22dd-afb2-44bb-b585-37e8ae8248cd
+# ╠═f4aeb3a9-7337-4553-b7c7-ca84b262cf76
 # ╠═47b6f1b7-d45a-4b45-bf9d-bb691a26bb9a
+# ╠═204cbf81-17fe-440d-8dcf-21d10ef55300
+# ╠═05301310-c6df-4836-bf15-dd9772afd8d1
 # ╠═0c6ef315-bd2f-433f-8a0f-4d259528b641
 # ╠═e526856c-c211-400f-ae7e-10b3293cead2
 # ╠═5f7d2903-2f83-4d0e-82c1-5b911a58ebd9
 # ╠═934e6da6-b909-4998-b9b0-3ab7d8f46ca1
 # ╠═43e909df-7a75-45d9-85a2-241a7e312eee
 # ╠═c38dfbe9-676b-4fc8-a909-93fc3f72cc0a
+# ╠═b9c4f178-5a44-404a-a67f-fd0f0647e90c
 # ╠═5b9d1f5a-501f-42a0-97fa-11fd87eb28cf
+# ╠═7470cbfd-a0dd-4f2d-a103-fbb4eeab30ca
+# ╠═b02a9057-332e-458b-8479-dd7f9a23f67e
 # ╠═89cbd087-3363-4029-8cac-11ee7c6f8ba0
+# ╠═b21f675f-d286-4d11-9d39-8a8595c2ad33
+# ╠═145465c5-57ce-4688-b0a9-7d0a03cf6eec
+# ╠═12d57eeb-5e36-4efd-82be-361488199d2e
+# ╠═1ce14d27-0961-4cb9-8f3e-8bf32071ea08
+# ╠═58e84d2f-ee88-4c55-afae-983f67a32699

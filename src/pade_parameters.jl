@@ -14,7 +14,7 @@ Base.@kwdef struct ParameterB_0
     b2 = 7.82159531356
     b3 = 0.300483986662
     b4 = 15.8443467125
-    b5 = b3*sqrt(1.5)*(4/9π)^(-1/3)
+    b5 = b3 * sqrt(1.5) * (4 / 9π)^(-1 / 3)
 end
 
 Base.@kwdef struct ParameterC_0
@@ -40,25 +40,25 @@ end
 
 function aa(θ)
     A = ParameterA()
-    return A.a00*tanh(1/θ)*(A.a0 + A.a1*θ^2 + A.a2*θ^3 + A.a3*θ^4)/(1 + A.a4*θ^2 + A.a5*θ^4)
+    return A.a00 * tanh(1 / θ) * (A.a0 + A.a1 * θ^2 + A.a2 * θ^3 + A.a3 * θ^4) / (1 + A.a4 * θ^2 + A.a5 * θ^4)
 end
 
 function b_0(θ)
     B = ParameterB_0()
-    return tanh(1/sqrt(θ))*(B.b1 + B.b2*θ^2 + B.b3*θ^4)/(1 + B.b4*θ^2 + B.b5*θ^4)
+    return tanh(1 / sqrt(θ)) * (B.b1 + B.b2 * θ^2 + B.b3 * θ^4) / (1 + B.b4 * θ^2 + B.b5 * θ^4)
 end
 
 function c_0(θ)
     C = ParameterC_0()
-    return (C.c1 + C.c2*exp(-1/θ))*e_0(θ)
+    return (C.c1 + C.c2 * exp(-1 / θ)) * e_0(θ)
 end
 
 function d_0(θ)
     D = ParameterD_0()
-    return tanh(1/sqrt(θ))*(D.d1 + D.d2*θ^2 + D.d3*θ^4)/(1 + D.d4*θ^2 + D.d5*θ^4)
+    return tanh(1 / sqrt(θ)) * (D.d1 + D.d2 * θ^2 + D.d3 * θ^4) / (1 + D.d4 * θ^2 + D.d5 * θ^4)
 end
 
 function e_0(θ)
     E = ParameterE_0()
-    return tanh(1/θ)*(E.e1 + E.e2*θ^2 + E.e3*θ^4)/(1 + E.e4*θ^2 + E.e5*θ^4)
+    return tanh(1 / θ) * (E.e1 + E.e2 * θ^2 + E.e3 * θ^4) / (1 + E.e4 * θ^2 + E.e5 * θ^4)
 end
