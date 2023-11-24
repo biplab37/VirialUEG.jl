@@ -1,5 +1,9 @@
 # Indices of the Functions
 
-```docs
-virial_interp
+```@index
+```
+## Function Definitions
+```@autodocs
+Modules = [VirialUEG]
+Order = [:function]
 ```

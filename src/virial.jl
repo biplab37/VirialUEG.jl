@@ -1,3 +1,8 @@
+"""
+    virial_interp(r, θ)
+
+Returns the virial function using the interpolation method described in the paper ... .
+"""
 function virial_interp(r, θ)
     a = aa(θ)
     b = b_0(θ)
@@ -9,6 +14,11 @@ function virial_interp(r, θ)
     return term1 + term2
 end
 
+"""
+    v2_eff(virial::Function, r, θ)
+
+Return the second virial coefficient for a given ``r`` and ``\theta``. A function to calculate virial function should be supplied.
+"""
 function v2_eff(virial::Function, r, θ)
     t = T(r, θ)
     nn = n(r)
@@ -36,6 +46,11 @@ function v0(temp)
     return -sqrt(π / temp)
 end
 
+"""
+    v3_eff(virial::Function, r, θ)
+
+Return the third virial coefficient for a given ``r`` and ``\theta``. A function to calculate virial function should be supplied.
+"""
 function v3_eff(virial, r, θ)
     temp = T(r, θ)
     nn = n(r)
@@ -48,6 +63,11 @@ function v3_eff(virial, r, θ, v_2)
     return (virial(r, θ) - v0(temp) * sqrt(nn) - v1(temp) * nn * log(4π * nn / temp^2) - v_2 * nn) / (nn^(3 / 2) * log(4π * nn / temp^2))
 end
 
+"""
+    v4_eff(virial::Function, r, θ)
+
+Return the fourth virial coefficient for a given ``r`` and ``\theta``. A function to calculate virial function should be supplied.
+"""
 function v4_eff(virial, r, θ)
     temp = T(r, θ)
     nn = n(r)
